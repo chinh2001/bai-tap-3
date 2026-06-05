@@ -1,0 +1,14 @@
+{
+  "name": "online-shop",
+  "version": "1.0.0",
+  "description": "Cửa hàng online - Website bán hàng",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "start": "vercel start"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^35.0.0"
+  }
+}

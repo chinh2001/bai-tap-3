@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cửa Hàng在线 Shop - Mua Sắm Dễ Dàng</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-store"></i>
+                <span>在线 Shop</span>
+            </a>
+            <nav class="nav">
+                <a href="#products">Sản phẩm</a>
+                <a href="#features">Giới thiệu</a>
+                <a href="#reviews">Đánh giá</a>
+                <a href="#contact">Liên hệ</a>
+            </nav>
+            <button class="cart-btn" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>🛍️ Mua Sắm Thông Minh<br>Tiết Kiệm Mỗi Ngày</h1>
+                <p>Sản phẩm chất lượng - Giá cả hợp lý - Giao hàng nhanh chóng</p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn btn-primary">Xem Sản Phẩm</a>
+                    <a href="#contact" class="btn btn-secondary">Liên Hệ Ngay</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-truck-fast"></i>
+                    <h3>Giao Hàng Nhanh</h3>
+                    <p>Giao trong 2-5 ngày toàn quốc</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-halved"></i>
+                    <h3>Cam Kết Chất Lượng</h3>
+                    <p>100% sản phẩm chính hãng</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>Hỗ Trợ 24/7</h3>
+                    <p>Luôn sẵn sàng hỗ trợ bạn</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-rotate-left"></i>
+                    <h3>Đổi Trả Dễ Dàng</h3>
+                    <p>7 ngày đổi trả miễn phí</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products" id="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>🏷️ Sản Phẩm Nổi Bật</h2>
+                <p>Chọn lọc những sản phẩm tốt nhất dành cho bạn</p>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="reviews" id="reviews">
+        <div class="container">
+            <div class="section-header">
+                <h2>💬 Đánh Giá Khách Hàng</h2>
+                <p>Những gì khách hàng đã nói về chúng tôi</p>
+            </div>
+            <div class="reviews-grid" id="reviewsGrid">
+                <!-- Reviews will be loaded by JavaScript -->
+            </div>
+            <div class="add-review">
+                <h3>📝 Viết Đánh Giá Của Bạn</h3>
+                <form id="reviewForm" onsubmit="addReview(event)">
+                    <div class="form-group">
+                        <input type="text" id="reviewName" placeholder="Tên của bạn" required>
+                    </div>
+                    <div class="form-group">
+                        <select id="reviewRating" required>
+                            <option value="">Đánh giá sao</option>
+                            <option value="5">⭐⭐⭐⭐⭐ Tuyệt vời</option>
+                            <option value="4">⭐⭐⭐⭐ Rất tốt</option>
+                            <option value="3">⭐⭐⭐ Bình thường</option>
+                            <option value="2">⭐⭐ Kém</option>
+                            <option value="1">⭐ Rất kém</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="reviewComment" placeholder="Chia sẻ trải nghiệm của bạn..." rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi Đánh Giá</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>📞 Liên Hệ Với Chúng Tôi</h2>
+                <p>Sẵn sàng hỗ trợ bạn mọi lúc</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Điện thoại</h4>
+                            <p>0901 234 567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>contact@onlineshop.vn</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-location-dot"></i>
+                        <div>
+                            <h4>Địa chỉ</h4>
+                            <p>123 Đường ABC, Quận 1, TP.HCM</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Giờ làm việc</h4>
+                            <p>8:00 - 22:00 (Thứ 2 - CN)</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
+                    <h3>Gửi Tin Nhắn Cho Chúng Tôi</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactName">Họ và tên *</label>
+                            <input type="text" id="contactName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPhone">Số điện thoại *</label>
+                            <input type="tel" id="contactPhone" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Email</label>
+                        <input type="email" id="contactEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage">Nội dung tin nhắn *</label>
+                        <textarea id="contactMessage" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Gửi Tin Nhắn
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-store"></i> 在线 Shop</h3>
+                    <p>Cửa hàng online uy tín, chất lượng. Đặt hàng dễ dàng, thanh toán tiện lợi.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Liên Kết Nhanh</h4>
+                    <ul>
+                        <li><a href="#products">Sản phẩm</a></li>
+                        <li><a href="#features">Giới thiệu</a></li>
+                        <li><a href="#reviews">Đánh giá</a></li>
+                        <li><a href="#contact">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Hỗ Trợ</h4>
+                    <ul>
+                        <li><a href="#">Chính sách giao hàng</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Câu hỏi thường gặp</a></li>
+                        <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Đăng Ký Nhận Tin</h4>
+                    <p>Nhận ưu đãi đặc biệt mỗi ngày</p>
+                    <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                        <input type="email" placeholder="Email của bạn" required>
+                        <button type="submit"><i class="fas fa-arrow-right"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 在线 Shop. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Giỏ Hàng</h3>
+            <button class="close-cart" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Tổng cộng:</span>
+                <span id="cartTotal">0đ</span>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="checkout()">
+                <i class="fas fa-credit-card"></i> Đặt Hàng Ngay
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('checkoutModal')">&times;</span>
+            <h2>📋 Xác Nhận Đơn Hàng</h2>
+            <form id="checkoutForm" onsubmit="completeCheckout(event)">
+                <div class="form-group">
+                    <label for="checkoutName">Họ và tên *</label>
+                    <input type="text" id="checkoutName" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkoutPhone">Số điện thoại *</label>
+                    <input type="tel" id="checkoutPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkoutAddress">Địa chỉ giao hàng *</label>
+                    <textarea id="checkoutAddress" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="checkoutNote">Ghi chú</label>
+                    <textarea id="checkoutNote" rows="2" placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao..."></textarea>
+                </div>
+                <div class="order-summary">
+                    <h4>Đơn hàng của bạn:</h4>
+                    <div id="orderSummaryItems"></div>
+                    <div class="order-total">
+                        <strong>Tổng: <span id="orderTotalPrice">0đ</span></strong>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-check"></i> Xác Nhận Đặt Hàng
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content modal-success">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Đặt Hàng Thành Công!</h2>
+            <p>Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ xác nhận trong thời gian sớm nhất.</p>
+            <button class="btn btn-primary" onclick="closeModal('successModal')">Tiếp Tục Mua Sắm</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span>Menu</span>
+            <button onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+        </div>
+        <nav class="mobile-nav">
+            <a href="#products" onclick="toggleMobileMenu()">Sản phẩm</a>
+            <a href="#features" onclick="toggleMobileMenu()">Giới thiệu</a>
+            <a href="#reviews" onclick="toggleMobileMenu()">Đánh giá</a>
+            <a href="#contact" onclick="toggleMobileMenu()">Liên hệ</a>
+        </nav>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
