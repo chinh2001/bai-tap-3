@@ -7,7 +7,7 @@ const products = [
         desc: "Tai nghe không dây chất lượng cao, chống ồn ANC, pin 30h",
         price: 890000,
         oldPrice: 1290000,
-        icon: "🎧"
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop"
     },
     {
         id: 2,
@@ -16,7 +16,7 @@ const products = [
         desc: "Màn hình AMOLED 120Hz, camera 108MP, pin 5000mAh",
         price: 6990000,
         oldPrice: 8490000,
-        icon: "📱"
+        image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop"
     },
     {
         id: 3,
@@ -25,7 +25,7 @@ const products = [
         desc: "Theo dõi sức khỏe, GPS, chống nước 5ATM, pin 7 ngày",
         price: 1590000,
         oldPrice: 2190000,
-        icon: "⌚"
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop"
     },
     {
         id: 4,
@@ -34,7 +34,7 @@ const products = [
         desc: "Mỏng nhẹ 1.2kg, i7 thế hệ 13, RAM 16GB, SSD 512GB",
         price: 21990000,
         oldPrice: 26990000,
-        icon: "💻"
+        image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=400&fit=crop"
     },
     {
         id: 5,
@@ -43,7 +43,7 @@ const products = [
         desc: "Quay 4K 60fps, chống rung, GPS tích hợp, màn hình xoay",
         price: 1890000,
         oldPrice: 2490000,
-        icon: "📹"
+        image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=400&fit=crop"
     },
     {
         id: 6,
@@ -52,7 +52,7 @@ const products = [
         desc: "Switch Blue, LED RGB, layout 75%, keycap PBT",
         price: 1190000,
         oldPrice: 1590000,
-        icon: "⌨️"
+        image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=400&fit=crop"
     },
     {
         id: 7,
@@ -61,7 +61,7 @@ const products = [
         desc: "Sensor 26K DPI, 8 nút lập trình, weight 58g",
         price: 690000,
         oldPrice: 890000,
-        icon: "🖱️"
+        image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=400&fit=crop"
     },
     {
         id: 8,
@@ -70,7 +70,7 @@ const products = [
         desc: "Âm thanh 360°, chống nước IPX7, pin 12h, kết nối đôi",
         price: 590000,
         oldPrice: 790000,
-        icon: "🔊"
+        image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=400&fit=crop"
     }
 ];
 
@@ -125,7 +125,9 @@ function renderProducts() {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = products.map(product => `
         <div class="product-card">
-            <div class="product-image">${product.icon}</div>
+            <div class="product-image">
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
+            </div>
             <div class="product-info">
                 <span class="product-category">${product.category}</span>
                 <h3 class="product-name">${product.name}</h3>
@@ -206,7 +208,7 @@ function updateCartUI() {
     } else {
         cartItems.innerHTML = cart.map(item => `
             <div class="cart-item">
-                <div class="cart-item-image">${item.icon}</div>
+                <div class="cart-item-image"><img src="${item.image}" alt="${item.name}"></div>
                 <div class="cart-item-info">
                     <div class="cart-item-name">${item.name}</div>
                     <div class="cart-item-price">${formatPrice(item.price)}</div>

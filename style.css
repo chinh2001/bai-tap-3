@@ -337,12 +337,18 @@ img {
 
 .product-image {
     height: 200px;
-    background: linear-gradient(135deg, var(--primary-light), var(--primary));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 60px;
-    color: white;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
 }
 
 .product-info {
@@ -759,14 +765,15 @@ img {
 .cart-item-image {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, var(--primary-light), var(--primary));
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: white;
+    overflow: hidden;
     flex-shrink: 0;
+}
+
+.cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .cart-item-info {
