@@ -320,6 +320,24 @@ img {
     opacity: 0.85;
 }
 
+.hero-banner-link {
+    display: block;
+    width: 100%;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+}
+
+.hero-banner-link:focus-visible {
+    outline: 3px solid #fde68a;
+    outline-offset: 4px;
+    border-radius: 24px;
+}
+
 .hero-banner {
     position: relative;
     display: flex;
@@ -334,10 +352,12 @@ img {
     background: radial-gradient(circle, rgba(245,158,11,0.35) 0%, transparent 70%);
     border-radius: 50%;
     animation: heroPulse 4s ease-in-out infinite;
+    pointer-events: none;
 }
 
 .hero-banner-img {
     position: relative;
+    z-index: 1;
     width: 100%;
     max-width: 420px;
     border-radius: 24px;
@@ -345,10 +365,16 @@ img {
     animation: heroFloat 5s ease-in-out infinite;
     object-fit: cover;
     aspect-ratio: 1;
+    transition: box-shadow 0.3s ease;
+}
+
+.hero-banner-link:hover .hero-banner-img {
+    box-shadow: 0 28px 56px rgba(0,0,0,0.35);
 }
 
 .hero-banner-card {
     position: absolute;
+    z-index: 2;
     bottom: 24px;
     left: -16px;
     background: white;
@@ -357,6 +383,18 @@ img {
     border-radius: var(--radius);
     box-shadow: var(--shadow-xl);
     min-width: 200px;
+    text-align: left;
+    pointer-events: none;
+}
+
+.hero-banner-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
 }
 
 .hero-banner-tag {
