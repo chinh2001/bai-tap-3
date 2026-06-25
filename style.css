@@ -238,13 +238,14 @@ img {
 }
 
 .hero-buttons .btn-secondary {
-    color: white;
+    color: #111827;
     border-color: white;
+    background: white;
 }
 
 .hero-buttons .btn-secondary:hover {
-    background: white;
-    color: var(--primary);
+    background: var(--gray-100);
+    color: #111827;
 }
 
 /* ========== Features ========== */
