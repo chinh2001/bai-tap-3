@@ -113,35 +113,22 @@ function isSupabaseConfigured() {
 }
 
 async function saveOrderToSupabase({ name, phone, address, note }) {
-    const total = getCartTotal();
-    const items = [...cart];
-
-    const { data: order, error: orderError } = await supabaseClient
-        .from('orders')
-        .insert({
-            customer_name: name,
-            phone,
-            address,
-            note: note || null,
-            total_amount: total
-        })
-        .select('id')
-        .single();
-
-    if (orderError) throw orderError;
-
-    const { error: itemsError } = await supabaseClient
-        .from('order_items')
-        .insert(items.map(item => ({
-            order_id: order.id,
+    const { error } = await supabaseClient.rpc('create_order', {
+        p_customer_name: name,
+        p_phone: phone,
+        p_address: address,
+        p_note: note || null,
+        p_total_amount: getCartTotal(),
+        p_items: cart.map(item => ({
             product_id: item.id,
             product_name: item.name,
             price: item.price,
             quantity: item.qty,
             line_total: item.price * item.qty
-        })));
+        }))
+    });
 
-    if (itemsError) throw itemsError;
+    if (error) throw error;
 }
 
 async function saveContactToSupabase({ name, phone, email, message }) {
@@ -350,8 +337,10 @@ async function completeCheckout(e) {
             document.getElementById('successModal').classList.add('active');
         }, 200);
     } catch (err) {
-        console.error('Lỗi lưu đơn hàng:', err);
-        showToast('Không thể đặt hàng. Vui lòng thử lại sau.');
+        console.error('Lỗi lưu đơn hàng:', err.message || err);
+        showToast(err.message?.includes('create_order')
+            ? 'Chưa cấu hình database. Chạy supabase-fix-orders.sql trên Supabase.'
+            : 'Không thể đặt hàng. Vui lòng thử lại sau.');
     } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
