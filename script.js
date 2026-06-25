@@ -99,6 +99,64 @@ const defaultReviews = [
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let reviews = JSON.parse(localStorage.getItem('reviews')) || [...defaultReviews];
 
+// ========== Supabase ==========
+const supabaseClient = (typeof SUPABASE_URL !== 'undefined'
+    && typeof SUPABASE_ANON_KEY !== 'undefined'
+    && SUPABASE_URL !== 'YOUR_SUPABASE_URL'
+    && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY'
+    && window.supabase)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
+function isSupabaseConfigured() {
+    return supabaseClient !== null;
+}
+
+async function saveOrderToSupabase({ name, phone, address, note }) {
+    const total = getCartTotal();
+    const items = [...cart];
+
+    const { data: order, error: orderError } = await supabaseClient
+        .from('orders')
+        .insert({
+            customer_name: name,
+            phone,
+            address,
+            note: note || null,
+            total_amount: total
+        })
+        .select('id')
+        .single();
+
+    if (orderError) throw orderError;
+
+    const { error: itemsError } = await supabaseClient
+        .from('order_items')
+        .insert(items.map(item => ({
+            order_id: order.id,
+            product_id: item.id,
+            product_name: item.name,
+            price: item.price,
+            quantity: item.qty,
+            line_total: item.price * item.qty
+        })));
+
+    if (itemsError) throw itemsError;
+}
+
+async function saveContactToSupabase({ name, phone, email, message }) {
+    const { error } = await supabaseClient
+        .from('contacts')
+        .insert({
+            name,
+            phone,
+            email: email || null,
+            message
+        });
+
+    if (error) throw error;
+}
+
 // ========== Utility ==========
 function formatPrice(price) {
     return price.toLocaleString('vi-VN') + 'đ';
@@ -259,34 +317,47 @@ function checkout() {
     document.body.style.overflow = 'hidden';
 }
 
-function completeCheckout(e) {
+async function completeCheckout(e) {
     e.preventDefault();
 
-    const name = document.getElementById('checkoutName').value;
-    const phone = document.getElementById('checkoutPhone').value;
-    const address = document.getElementById('checkoutAddress').value;
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+    const name = document.getElementById('checkoutName').value.trim();
+    const phone = document.getElementById('checkoutPhone').value.trim();
+    const address = document.getElementById('checkoutAddress').value.trim();
+    const note = document.getElementById('checkoutNote').value.trim();
 
-    // In real app, send to server/backend
-    console.log('=== NEW ORDER ===');
-    console.log('Customer:', name, '| Phone:', phone, '| Address:', address);
-    console.log('Items:', cart);
-    console.log('Total:', formatPrice(getCartTotal()));
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang xử lý...';
+    }
 
-    // Clear cart
-    cart = [];
-    saveCart();
-    updateCartUI();
+    try {
+        if (isSupabaseConfigured()) {
+            await saveOrderToSupabase({ name, phone, address, note });
+        } else {
+            console.warn('Supabase chưa cấu hình — đơn hàng chỉ được log tạm.');
+            console.log('=== NEW ORDER ===', { name, phone, address, note, items: cart, total: getCartTotal() });
+        }
 
-    // Close checkout modal
-    closeModal('checkoutModal');
+        cart = [];
+        saveCart();
+        updateCartUI();
+        closeModal('checkoutModal');
+        document.getElementById('checkoutForm').reset();
 
-    // Show success
-    setTimeout(() => {
-        document.getElementById('successModal').classList.add('active');
-    }, 200);
-
-    // Reset form
-    document.getElementById('checkoutForm').reset();
+        setTimeout(() => {
+            document.getElementById('successModal').classList.add('active');
+        }, 200);
+    } catch (err) {
+        console.error('Lỗi lưu đơn hàng:', err);
+        showToast('Không thể đặt hàng. Vui lòng thử lại sau.');
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+        }
+    }
 }
 
 // ========== Reviews ==========
@@ -345,23 +416,40 @@ function addReview(e) {
 }
 
 // ========== Contact ==========
-function submitContact(e) {
+async function submitContact(e) {
     e.preventDefault();
 
-    const name = document.getElementById('contactName').value;
-    const phone = document.getElementById('contactPhone').value;
-    const email = document.getElementById('contactEmail').value;
-    const message = document.getElementById('contactMessage').value;
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+    const name = document.getElementById('contactName').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
 
-    // In real app, send to backend/email service
-    console.log('=== CONTACT FORM ===');
-    console.log('Name:', name);
-    console.log('Phone:', phone);
-    console.log('Email:', email);
-    console.log('Message:', message);
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang gửi...';
+    }
 
-    showToast('Tin nhắn đã được gửi! Chúng tôi sẽ liên hệ sớm.');
-    document.getElementById('contactForm').reset();
+    try {
+        if (isSupabaseConfigured()) {
+            await saveContactToSupabase({ name, phone, email, message });
+        } else {
+            console.warn('Supabase chưa cấu hình — tin nhắn chỉ được log tạm.');
+            console.log('=== CONTACT FORM ===', { name, phone, email, message });
+        }
+
+        showToast('Tin nhắn đã được gửi! Chúng tôi sẽ liên hệ sớm.');
+        document.getElementById('contactForm').reset();
+    } catch (err) {
+        console.error('Lỗi gửi tin nhắn:', err);
+        showToast('Không thể gửi tin nhắn. Vui lòng thử lại sau.');
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+        }
+    }
 }
 
 function subscribeNewsletter(e) {
