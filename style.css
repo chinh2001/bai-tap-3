@@ -545,7 +545,86 @@ img {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
+    margin-bottom: 24px;
+}
+
+.reviews-toggle-wrap {
+    display: flex;
+    justify-content: center;
     margin-bottom: 48px;
+}
+
+.reviews-toggle {
+    display: inline-flex;
+    border-radius: 50px;
+    overflow: hidden;
+    border: 2px solid var(--primary);
+    box-shadow: var(--shadow);
+}
+
+.reviews-toggle:not(.is-expanded) {
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.reviews-toggle.is-expanded {
+    border: 2px solid var(--primary);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.reviews-toggle:not(.is-expanded) .reviews-toggle-more {
+    border: 2px solid var(--primary);
+    border-radius: 50px;
+    box-shadow: var(--shadow);
+}
+
+.reviews-toggle-btn {
+    border: none;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.reviews-toggle-more {
+    background: var(--primary);
+    color: white;
+}
+
+.reviews-toggle-more:hover {
+    background: var(--primary-dark);
+}
+
+.reviews-toggle-collapse {
+    background: white;
+    color: var(--gray-700);
+    border-left: 2px solid var(--primary);
+}
+
+.reviews-toggle-collapse:hover {
+    background: var(--gray-100);
+    color: var(--gray-900);
+}
+
+.reviews-toggle.is-expanded .reviews-toggle-more:not([hidden]) {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.reviews-toggle.collapse-only {
+    border: 2px solid var(--gray-300);
+}
+
+.reviews-toggle.collapse-only .reviews-toggle-collapse {
+    border-left: none;
+    border-radius: 50px;
+    padding: 12px 28px;
 }
 
 .review-card {
@@ -585,6 +664,29 @@ img {
     font-size: 14px;
 }
 
+.review-date {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: 2px;
+}
+
+.review-card-new {
+    animation: reviewPopIn 0.5s ease;
+    border-color: var(--primary-light) !important;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15), var(--shadow-lg) !important;
+}
+
+@keyframes reviewPopIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .review-text {
     color: var(--gray-600);
     font-size: 15px;
@@ -604,6 +706,23 @@ img {
     text-align: center;
     margin-bottom: 24px;
     color: var(--gray-800);
+}
+
+.add-review form:has(:disabled) {
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+.review-limit-message {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 10px;
+    color: var(--primary-dark);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
 }
 
 /* ========== Contact ========== */
@@ -653,6 +772,52 @@ img {
 .contact-item p {
     color: var(--gray-600);
     font-size: 15px;
+}
+
+.contact-channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.contact-channel {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+}
+
+.contact-channel-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-channel-zalo {
+    background: #0068ff;
+}
+
+.contact-channel-zalo:hover {
+    background: #0052cc;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.contact-channel-facebook {
+    background: #1877f2;
+}
+
+.contact-channel-facebook:hover {
+    background: #0d65d9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 .contact-form {
@@ -763,6 +928,75 @@ img {
     background: var(--primary);
     color: white;
     transform: translateY(-3px);
+}
+
+.social-zalo:hover {
+    background: #0068ff;
+}
+
+/* ========== Floating contact ========== */
+.contact-float {
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    z-index: 4500;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-float-btn {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    color: white;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.contact-float-btn:hover {
+    width: auto;
+    padding: 0 18px 0 14px;
+    border-radius: 50px;
+    transform: translateX(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+}
+
+.contact-float-zalo {
+    background: #0068ff;
+}
+
+.contact-float-zalo:hover {
+    background: #0052cc;
+}
+
+.contact-float-facebook {
+    background: #1877f2;
+}
+
+.contact-float-facebook:hover {
+    background: #0d65d9;
+}
+
+.contact-float-label {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.contact-float-btn:hover .contact-float-label {
+    max-width: 100px;
+    opacity: 1;
+    margin-left: 8px;
 }
 
 .footer-section ul li {
@@ -1260,6 +1494,33 @@ img {
 
     .form-row {
         grid-template-columns: 1fr;
+    }
+
+    .contact-float {
+        right: 14px;
+        bottom: 16px;
+        gap: 10px;
+    }
+
+    .contact-float-btn {
+        width: auto;
+        height: 44px;
+        padding: 0 14px;
+        border-radius: 50px;
+    }
+
+    .contact-float-label {
+        max-width: 80px;
+        opacity: 1;
+        margin-left: 8px;
+    }
+
+    .contact-channels {
+        flex-direction: column;
+    }
+
+    .contact-channel {
+        justify-content: center;
     }
 }
 

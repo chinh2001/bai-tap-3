@@ -98,6 +98,10 @@ const defaultReviews = [
 // ========== State ==========
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let reviews = JSON.parse(localStorage.getItem('reviews')) || [...defaultReviews];
+const REVIEW_SUBMITTED_KEY = 'hasSubmittedReview';
+const REVIEWS_PAGE_SIZE = 6;
+let reviewVisibleCount = REVIEWS_PAGE_SIZE;
+let reviewsExpanded = false;
 
 // ========== Supabase ==========
 const supabaseClient = (typeof SUPABASE_URL !== 'undefined'
@@ -354,32 +358,106 @@ function renderStars(rating) {
     return '⭐'.repeat(rating);
 }
 
+function renderReviewCard(review, index) {
+    const initial = review.name.charAt(0).toUpperCase();
+    const dateLabel = review.date ? `<div class="review-date">${review.date}</div>` : '';
+    return `
+        <div class="review-card" data-review-index="${index}">
+            <div class="review-header">
+                <div class="review-avatar">${initial}</div>
+                <div>
+                    <div class="review-name">${review.name}</div>
+                    <div class="review-stars">${renderStars(review.rating)}</div>
+                    ${dateLabel}
+                </div>
+            </div>
+            <p class="review-text">${review.comment}</p>
+        </div>
+    `;
+}
+
+function updateReviewsActions() {
+    const wrap = document.getElementById('reviewsActions');
+    const pill = document.getElementById('reviewsTogglePill');
+    const loadMoreBtn = document.getElementById('reviewsLoadMoreBtn');
+    const collapseBtn = document.getElementById('reviewsCollapseBtn');
+    if (!wrap || !pill || !loadMoreBtn || !collapseBtn) return;
+
+    const remaining = reviews.length - reviewVisibleCount;
+    const canLoadMore = remaining > 0;
+
+    if (reviews.length <= REVIEWS_PAGE_SIZE) {
+        wrap.hidden = true;
+        return;
+    }
+
+    wrap.hidden = false;
+    loadMoreBtn.hidden = !canLoadMore;
+    collapseBtn.hidden = !reviewsExpanded;
+
+    pill.classList.toggle('is-expanded', reviewsExpanded);
+    pill.classList.toggle('collapse-only', reviewsExpanded && !canLoadMore);
+
+    if (canLoadMore) {
+        const nextBatch = Math.min(remaining, REVIEWS_PAGE_SIZE);
+        loadMoreBtn.textContent = nextBatch === remaining && remaining <= REVIEWS_PAGE_SIZE
+            ? `Xem thêm (${remaining} đánh giá)`
+            : `Xem thêm ${nextBatch} đánh giá`;
+    }
+}
+
+function loadMoreReviews() {
+    reviewVisibleCount = Math.min(reviewVisibleCount + REVIEWS_PAGE_SIZE, reviews.length);
+    reviewsExpanded = true;
+    renderReviews();
+}
+
+function collapseReviews() {
+    reviewVisibleCount = REVIEWS_PAGE_SIZE;
+    reviewsExpanded = false;
+    renderReviews();
+    document.getElementById('reviewsGrid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function renderReviews() {
     const grid = document.getElementById('reviewsGrid');
     if (reviews.length === 0) {
         grid.innerHTML = '<p style="text-align:center;color:var(--gray-400);grid-column:1/-1;">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>';
+        updateReviewsActions();
         return;
     }
 
-    grid.innerHTML = reviews.map((review, index) => {
-        const initial = review.name.charAt(0).toUpperCase();
-        return `
-            <div class="review-card">
-                <div class="review-header">
-                    <div class="review-avatar">${initial}</div>
-                    <div>
-                        <div class="review-name">${review.name}</div>
-                        <div class="review-stars">${renderStars(review.rating)}</div>
-                    </div>
-                </div>
-                <p class="review-text">${review.comment}</p>
-            </div>
-        `;
-    }).join('');
+    const visibleReviews = reviews.slice(0, reviewVisibleCount);
+    grid.innerHTML = visibleReviews.map((review, index) => renderReviewCard(review, index)).join('');
+    updateReviewsActions();
+}
+
+function hasSubmittedReview() {
+    return localStorage.getItem(REVIEW_SUBMITTED_KEY) === 'true';
+}
+
+function lockReviewForm() {
+    const form = document.getElementById('reviewForm');
+    const message = document.getElementById('reviewLimitMessage');
+    if (!form) return;
+
+    form.querySelectorAll('input, select, textarea, button').forEach(field => {
+        field.disabled = true;
+    });
+
+    if (message) {
+        message.hidden = false;
+    }
 }
 
 function addReview(e) {
     e.preventDefault();
+
+    if (hasSubmittedReview()) {
+        lockReviewForm();
+        showToast('Bạn đã đánh giá rồi. Mỗi người chỉ được đánh giá 1 lần.');
+        return;
+    }
 
     const name = document.getElementById('reviewName').value.trim();
     const rating = parseInt(document.getElementById('reviewRating').value);
@@ -398,10 +476,21 @@ function addReview(e) {
     });
 
     saveReviews();
+    localStorage.setItem(REVIEW_SUBMITTED_KEY, 'true');
+    reviewVisibleCount = REVIEWS_PAGE_SIZE;
+    reviewsExpanded = false;
     renderReviews();
 
+    const newReview = document.querySelector('#reviewsGrid .review-card');
+    if (newReview) {
+        newReview.classList.add('review-card-new');
+        newReview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => newReview.classList.remove('review-card-new'), 2500);
+    }
+
     document.getElementById('reviewForm').reset();
-    showToast('Cảm ơn bạn đã đánh giá!');
+    lockReviewForm();
+    showToast('Cảm ơn bạn đã đánh giá! Đánh giá của bạn đã hiển thị ở trên.');
 }
 
 // ========== Contact ==========
@@ -477,9 +566,29 @@ document.getElementById('overlay').addEventListener('click', () => {
     document.body.style.overflow = '';
 });
 
+// ========== Contact links ==========
+function initContactLinks() {
+    const links = {
+        zalo: typeof ZALO_LINK !== 'undefined' ? ZALO_LINK : '',
+        facebook: typeof FACEBOOK_LINK !== 'undefined' ? FACEBOOK_LINK : ''
+    };
+
+    document.querySelectorAll('[data-contact]').forEach(el => {
+        const channel = el.dataset.contact;
+        const url = links[channel];
+        if (url && url !== 'YOUR_ZALO_LINK' && url !== 'YOUR_FACEBOOK_LINK') {
+            el.href = url;
+        }
+    });
+}
+
 // ========== Init ==========
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     renderReviews();
     updateCartUI();
+    initContactLinks();
+    if (hasSubmittedReview()) {
+        lockReviewForm();
+    }
 });
