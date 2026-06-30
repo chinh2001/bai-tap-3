@@ -93,43 +93,103 @@ async function loadOrCreateProfile() {
 }
 
 function getDisplayName() {
-    const name = currentProfile?.full_name || currentUser?.user_metadata?.full_name || currentUser?.email;
+    const name = currentProfile?.full_name || currentUser?.user_metadata?.full_name || currentUser?.user_metadata?.name || currentUser?.email;
     if (!name) return 'Bạn';
     return name.split(' ')[0];
 }
 
+function getFullName() {
+    return currentProfile?.full_name
+        || currentUser?.user_metadata?.full_name
+        || currentUser?.user_metadata?.name
+        || currentUser?.email
+        || 'Bạn';
+}
+
+function getUserInitial() {
+    const name = getFullName();
+    return name.charAt(0).toUpperCase();
+}
+
+function getAvatarUrl() {
+    if (!currentUser) return '';
+    return currentProfile?.avatar_url
+        || currentUser.user_metadata?.avatar_url
+        || currentUser.user_metadata?.picture
+        || '';
+}
+
+function setAvatarImage(imgEl, fallbackEl, url) {
+    if (!imgEl || !fallbackEl) return;
+
+    if (url) {
+        imgEl.src = url;
+        imgEl.alt = getFullName();
+        imgEl.hidden = false;
+        fallbackEl.hidden = true;
+        imgEl.onerror = () => {
+            imgEl.hidden = true;
+            fallbackEl.hidden = false;
+            fallbackEl.textContent = getUserInitial();
+        };
+    } else {
+        imgEl.hidden = true;
+        fallbackEl.hidden = false;
+        fallbackEl.textContent = getUserInitial();
+    }
+}
+
 function updateAuthUI() {
-    const loginBtn = document.getElementById('loginBtn');
-    const userMenu = document.getElementById('userMenu');
+    const authArea = document.getElementById('authArea');
     const mobileLogin = document.getElementById('mobileLoginBtn');
-    const mobileUser = document.getElementById('mobileUserInfo');
+    const mobileUserCard = document.getElementById('mobileUserCard');
+    const mobileSignOut = document.getElementById('mobileSignOutBtn');
+
+    if (authArea) {
+        authArea.classList.remove('auth-loading', 'auth-guest', 'auth-user');
+        authArea.classList.add(currentUser ? 'auth-user' : 'auth-guest');
+    }
 
     if (currentUser) {
-        if (loginBtn) loginBtn.hidden = true;
-        if (userMenu) userMenu.hidden = false;
         if (mobileLogin) mobileLogin.hidden = true;
-        if (mobileUser) {
-            mobileUser.hidden = false;
-            mobileUser.textContent = getDisplayName();
-        }
+        if (mobileUserCard) mobileUserCard.hidden = false;
+        if (mobileSignOut) mobileSignOut.hidden = false;
+
+        const displayName = getDisplayName();
+        const fullName = getFullName();
+        const email = currentUser.email || '';
+        const avatarUrl = getAvatarUrl();
 
         const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        const dropdownName = document.getElementById('dropdownName');
+        const dropdownEmail = document.getElementById('dropdownEmail');
         const userAvatar = document.getElementById('userAvatar');
-        if (userName) userName.textContent = getDisplayName();
-        if (userAvatar) {
-            const url = currentProfile?.avatar_url || currentUser.user_metadata?.avatar_url || currentUser.user_metadata?.picture;
-            if (url) {
-                userAvatar.src = url;
-                userAvatar.hidden = false;
+        const userAvatarFallback = document.getElementById('userAvatarFallback');
+        const mobileUserName = document.getElementById('mobileUserName');
+        const mobileUserEmail = document.getElementById('mobileUserEmail');
+        const mobileUserAvatar = document.getElementById('mobileUserAvatar');
+
+        if (userName) userName.textContent = displayName;
+        if (userEmail) userEmail.textContent = email;
+        if (dropdownName) dropdownName.textContent = fullName;
+        if (dropdownEmail) dropdownEmail.textContent = email;
+        if (mobileUserName) mobileUserName.textContent = fullName;
+        if (mobileUserEmail) mobileUserEmail.textContent = email;
+
+        setAvatarImage(userAvatar, userAvatarFallback, avatarUrl);
+
+        if (mobileUserAvatar) {
+            if (avatarUrl) {
+                mobileUserAvatar.innerHTML = `<img src="${avatarUrl}" alt="${fullName}">`;
             } else {
-                userAvatar.hidden = true;
+                mobileUserAvatar.textContent = getUserInitial();
             }
         }
     } else {
-        if (loginBtn) loginBtn.hidden = false;
-        if (userMenu) userMenu.hidden = true;
         if (mobileLogin) mobileLogin.hidden = false;
-        if (mobileUser) mobileUser.hidden = true;
+        if (mobileUserCard) mobileUserCard.hidden = true;
+        if (mobileSignOut) mobileSignOut.hidden = true;
     }
 }
 
@@ -169,12 +229,16 @@ async function signOut() {
 
 function toggleUserDropdown() {
     const dropdown = document.getElementById('userDropdown');
-    if (dropdown) dropdown.classList.toggle('open');
+    const menuBtn = document.getElementById('userMenuBtn');
+    const isOpen = dropdown?.classList.toggle('open');
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 
 function closeUserDropdown() {
     const dropdown = document.getElementById('userDropdown');
+    const menuBtn = document.getElementById('userMenuBtn');
     if (dropdown) dropdown.classList.remove('open');
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
 }
 
 function openAccountModal() {
