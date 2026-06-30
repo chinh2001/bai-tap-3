@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm | NhaVuiShop</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
+    <link rel="apple-touch-icon" href="favicon.svg?v=2">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-phone"></i> Hotline: <a href="tel:0984893326">0984 893 326</a></span>
+            <span><i class="fas fa-truck-fast"></i> Giao hàng toàn quốc · Miễn phí nội thành</span>
+            <span><i class="fas fa-shield-halved"></i> 100% chính hãng · Bảo hành uy tín</span>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-store"></i>
+                <span>NhaVuiShop</span>
+            </a>
+            <nav class="nav">
+                <a href="index.html#products">Sản phẩm</a>
+                <a href="index.html#features">Giới thiệu</a>
+                <a href="index.html#reviews">Đánh giá</a>
+                <a href="index.html#contact">Liên hệ</a>
+            </nav>
+            <button class="cart-btn" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="product-page">
+        <div class="container" id="productPageContent">
+            <!-- Rendered by product-page.js -->
+        </div>
+    </main>
+
+    <section class="related-products" id="relatedProducts"></section>
+
+    <section class="commitments commitments-compact">
+        <div class="container">
+            <div class="commitments-grid">
+                <div class="commitment-item">
+                    <i class="fas fa-tags"></i>
+                    <div><strong>Giá tốt nhất</strong><span>Cam kết giá cạnh tranh</span></div>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-bolt"></i>
+                    <div><strong>Giao nhanh 2–5 ngày</strong><span>Hỏa tốc nội thành</span></div>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-rotate-left"></i>
+                    <div><strong>Đổi trả 7 ngày</strong><span>Lỗi do nhà sản xuất</span></div>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-certificate"></i>
+                    <div><strong>Bảo hành chính hãng</strong><span>100% hàng thật</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 NhaVuiShop. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Giỏ Hàng</h3>
+            <button class="close-cart" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Tổng cộng:</span>
+                <span id="cartTotal">0đ</span>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="checkout()">
+                <i class="fas fa-credit-card"></i> Đặt Hàng Ngay
+            </button>
+        </div>
+    </div>
+
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('checkoutModal')">&times;</span>
+            <h2>Xác Nhận Đơn Hàng</h2>
+            <form id="checkoutForm" onsubmit="completeCheckout(event)">
+                <div class="form-group">
+                    <label for="checkoutName">Họ và tên *</label>
+                    <input type="text" id="checkoutName" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkoutPhone">Số điện thoại *</label>
+                    <input type="tel" id="checkoutPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkoutAddress">Địa chỉ giao hàng *</label>
+                    <textarea id="checkoutAddress" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="checkoutNote">Ghi chú</label>
+                    <textarea id="checkoutNote" rows="2" placeholder="Ví dụ: Giao giờ hành chính..."></textarea>
+                </div>
+                <div class="order-summary">
+                    <h4>Đơn hàng của bạn:</h4>
+                    <div id="orderSummaryItems"></div>
+                    <div class="order-total">
+                        <strong>Tổng: <span id="orderTotalPrice">0đ</span></strong>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-check"></i> Xác Nhận Đặt Hàng
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="successModal">
+        <div class="modal-content modal-success">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>Đặt Hàng Thành Công!</h2>
+            <p>Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ xác nhận trong thời gian sớm nhất.</p>
+            <button class="btn btn-primary" onclick="closeModal('successModal')">Tiếp Tục Mua Sắm</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"><span id="toastMessage"></span></div>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span>Menu</span>
+            <button onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+        </div>
+        <nav class="mobile-nav">
+            <a href="index.html#products" onclick="toggleMobileMenu()">Sản phẩm</a>
+            <a href="index.html#features" onclick="toggleMobileMenu()">Giới thiệu</a>
+            <a href="index.html#reviews" onclick="toggleMobileMenu()">Đánh giá</a>
+            <a href="index.html#contact" onclick="toggleMobileMenu()">Liên hệ</a>
+        </nav>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="contact-float" aria-label="Liên hệ nhanh">
+        <a href="#" class="contact-float-btn contact-float-zalo" data-contact="zalo" target="_blank" rel="noopener noreferrer" aria-label="Chat Zalo">
+            <svg viewBox="0 0 48 48" width="26" height="26" fill="currentColor"><path d="M24 4C12.954 4 4 11.74 4 21.5c0 5.08 2.556 9.624 6.564 12.6L9 40l6.698-3.35C17.88 37.214 20.888 38 24 38c11.046 0 20-7.74 20-17.5S35.046 4 24 4zm-4.2 22.5h-3.6l-4.2-6.3v6.3h-3.6V15h3.6l4.2 6.3V15h3.6v11.5zm8.4 0h-3.6V15h3.6v11.5zm8.4 0h-3.3l-2.7-3.6 2.7-3.6h3.3l-2.7 3.6 2.7 3.6z"/></svg>
+            <span class="contact-float-label">Zalo</span>
+        </a>
+        <a href="#" class="contact-float-btn contact-float-facebook" data-contact="facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i>
+            <span class="contact-float-label">Facebook</span>
+        </a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="contact-config.js"></script>
+    <script src="products-data.js"></script>
+    <script src="script.js"></script>
+    <script src="product-page.js"></script>
+</body>
+</html>

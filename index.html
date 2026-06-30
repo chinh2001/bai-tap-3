@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cửa Hàng MMO Việt - Mua Sắm Dễ Dàng</title>
+    <title>NhaVuiShop - Mua Sắm Thông Minh</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2">
     <link rel="apple-touch-icon" href="favicon.svg?v=2">
     <link rel="stylesheet" href="style.css">
@@ -13,12 +13,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+    <!-- Hotline bar -->
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span><i class="fas fa-phone"></i> Hotline: <a href="tel:0984893326">0984 893 326</a></span>
+            <span><i class="fas fa-truck-fast"></i> Giao hàng toàn quốc · Miễn phí nội thành</span>
+            <span><i class="fas fa-shield-halved"></i> 100% chính hãng · Bảo hành uy tín</span>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <div class="container header-content">
-            <a href="#" class="logo">
+            <a href="index.html" class="logo">
                 <i class="fas fa-store"></i>
-                <span>cậu cả Shop</span>
+                <span>NhaVuiShop</span>
             </a>
             <nav class="nav">
                 <a href="#products">Sản phẩm</a>
@@ -98,12 +107,63 @@
         </div>
     </section>
 
+    <!-- Cam kết shop (theo mẫu điện máy chuyên nghiệp) -->
+    <section class="commitments">
+        <div class="container">
+            <div class="commitments-grid">
+                <div class="commitment-item">
+                    <i class="fas fa-tags"></i>
+                    <div>
+                        <strong>Giá tốt nhất</strong>
+                        <span>Cam kết giá cạnh tranh</span>
+                    </div>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-bolt"></i>
+                    <div>
+                        <strong>Giao nhanh 2–5 ngày</strong>
+                        <span>Hỏa tốc nội thành</span>
+                    </div>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-rotate-left"></i>
+                    <div>
+                        <strong>Đổi trả 7 ngày</strong>
+                        <span>Lỗi do nhà sản xuất</span>
+                    </div>
+                </div>
+                <div class="commitment-item">
+                    <i class="fas fa-certificate"></i>
+                    <div>
+                        <strong>Bảo hành chính hãng</strong>
+                        <span>100% hàng thật</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Products -->
     <section class="products" id="products">
         <div class="container">
+            <div class="flash-sale" id="flashSale">
+                <div class="flash-sale-info">
+                    <span class="flash-sale-tag"><i class="fas fa-fire"></i> Flash Sale</span>
+                    <p>Giảm sốc hôm nay — số lượng có hạn!</p>
+                </div>
+                <div class="flash-sale-timer">
+                    <span>Kết thúc sau</span>
+                    <div class="timer-digits" id="flashTimer">
+                        <span id="timerH">00</span>:<span id="timerM">00</span>:<span id="timerS">00</span>
+                    </div>
+                </div>
+            </div>
             <div class="section-header">
-                <h2>🏷️ Sản Phẩm Nổi Bật</h2>
+                <h2>Sản Phẩm Nổi Bật</h2>
                 <p>Chọn lọc những sản phẩm tốt nhất dành cho bạn</p>
+            </div>
+            <div class="category-filter" id="categoryFilter">
+                <!-- Categories loaded by JS -->
             </div>
             <div class="products-grid" id="productsGrid">
                 <!-- Products will be loaded by JavaScript -->
@@ -242,7 +302,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3><i class="fas fa-store"></i> Cửa Hàng</h3>
+                    <h3><i class="fas fa-store"></i> NhaVuiShop</h3>
                     <p>Cửa hàng online uy tín, chất lượng. Đặt hàng dễ dàng, thanh toán tiện lợi.</p>
                     <div class="social-links">
                         <a href="#" data-contact="zalo" target="_blank" rel="noopener noreferrer" aria-label="Zalo" class="social-zalo">
@@ -279,7 +339,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Cửa Hàng. Tất cả quyền được bảo lưu.</p>
+                <p>&copy; 2026 NhaVuiShop. Tất cả quyền được bảo lưu.</p>
             </div>
         </div>
     </footer>
@@ -389,6 +449,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="contact-config.js"></script>
+    <script src="products-data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
