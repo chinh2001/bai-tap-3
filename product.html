@@ -33,13 +33,32 @@
                 <a href="index.html#reviews">Đánh giá</a>
                 <a href="index.html#contact">Liên hệ</a>
             </nav>
-            <button class="cart-btn" onclick="toggleCart()">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count" id="cartCount">0</span>
-            </button>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
+            <div class="header-actions">
+                <div class="auth-area" id="authArea">
+                    <button type="button" class="btn-auth-google" id="loginBtn" onclick="signInWithGoogle()">
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        Đăng nhập
+                    </button>
+                    <div class="user-menu" id="userMenu" hidden>
+                        <button type="button" class="user-menu-btn" onclick="toggleUserDropdown()">
+                            <img class="user-avatar" id="userAvatar" alt="" width="32" height="32">
+                            <span id="userName">Bạn</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <button type="button" onclick="openAccountModal()"><i class="fas fa-user"></i> Thông tin của tôi</button>
+                            <button type="button" onclick="signOut()"><i class="fas fa-right-from-bracket"></i> Đăng xuất</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="cart-btn" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -99,11 +118,45 @@
         </div>
     </div>
 
+    <div class="modal" id="accountModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('accountModal')">&times;</span>
+            <h2>Thông Tin Tài Khoản</h2>
+            <form id="accountForm" onsubmit="saveAccountProfile(event)">
+                <div class="form-group">
+                    <label for="accountEmail">Email (Google)</label>
+                    <input type="email" id="accountEmail" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="accountName">Họ và tên *</label>
+                    <input type="text" id="accountName" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountPhone">Số điện thoại *</label>
+                    <input type="tel" id="accountPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountAddress">Địa chỉ giao hàng *</label>
+                    <textarea id="accountAddress" rows="3" required></textarea>
+                </div>
+                <p class="form-hint">Thông tin này sẽ tự điền khi bạn đặt hàng lần sau.</p>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-save"></i> Lưu thông tin
+                </button>
+            </form>
+        </div>
+    </div>
+
     <div class="modal" id="checkoutModal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('checkoutModal')">&times;</span>
             <h2>Xác Nhận Đơn Hàng</h2>
             <form id="checkoutForm" onsubmit="completeCheckout(event)">
+                <div class="form-group">
+                    <label for="checkoutEmail">Email</label>
+                    <input type="email" id="checkoutEmail" placeholder="email@example.com">
+                    <small class="form-hint">Đăng nhập Google để tự điền email</small>
+                </div>
                 <div class="form-group">
                     <label for="checkoutName">Họ và tên *</label>
                     <input type="text" id="checkoutName" required>
@@ -155,6 +208,10 @@
             <a href="index.html#features" onclick="toggleMobileMenu()">Giới thiệu</a>
             <a href="index.html#reviews" onclick="toggleMobileMenu()">Đánh giá</a>
             <a href="index.html#contact" onclick="toggleMobileMenu()">Liên hệ</a>
+            <button type="button" class="mobile-auth-btn" id="mobileLoginBtn" onclick="signInWithGoogle(); toggleMobileMenu();">
+                <i class="fab fa-google"></i> Đăng nhập Google
+            </button>
+            <span class="mobile-user-info" id="mobileUserInfo" hidden></span>
         </nav>
     </div>
 
@@ -174,6 +231,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="contact-config.js"></script>
+    <script src="auth.js"></script>
     <script src="products-data.js"></script>
     <script src="script.js"></script>
     <script src="product-page.js"></script>

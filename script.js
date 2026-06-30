@@ -33,20 +33,13 @@ let reviewVisibleCount = REVIEWS_PAGE_SIZE;
 let reviewsExpanded = false;
 
 // ========== Supabase ==========
-const supabaseClient = (typeof SUPABASE_URL !== 'undefined'
-    && typeof SUPABASE_ANON_KEY !== 'undefined'
-    && SUPABASE_URL !== 'YOUR_SUPABASE_URL'
-    && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY'
-    && window.supabase)
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-    : null;
-
 function isSupabaseConfigured() {
-    return supabaseClient !== null;
+    if (typeof initSupabaseClient === 'function') initSupabaseClient();
+    return window.supabaseClient != null;
 }
 
 async function saveOrderToSupabase({ name, phone, address, note }) {
-    const { error } = await supabaseClient.rpc('create_order', {
+    const { error } = await window.supabaseClient.rpc('create_order', {
         p_customer_name: name,
         p_phone: phone,
         p_address: address,
@@ -58,14 +51,15 @@ async function saveOrderToSupabase({ name, phone, address, note }) {
             price: item.price,
             quantity: item.qty,
             line_total: item.price * item.qty
-        }))
+        })),
+        p_user_id: typeof getCurrentUserId === 'function' ? getCurrentUserId() : null
     });
 
     if (error) throw error;
 }
 
 async function saveContactToSupabase({ name, phone, email, message }) {
-    const { error } = await supabaseClient
+    const { error } = await window.supabaseClient
         .from('contacts')
         .insert({
             name,
@@ -316,6 +310,8 @@ function checkout() {
     `).join('');
     document.getElementById('orderTotalPrice').textContent = formatPrice(getCartTotal());
 
+    if (typeof prefillCheckoutForm === 'function') prefillCheckoutForm();
+
     toggleCart();
     document.getElementById('checkoutModal').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -339,6 +335,9 @@ async function completeCheckout(e) {
     try {
         if (isSupabaseConfigured()) {
             await saveOrderToSupabase({ name, phone, address, note });
+            if (typeof saveUserProfileFromCheckout === 'function') {
+                await saveUserProfileFromCheckout({ name, phone, address });
+            }
         } else {
             console.warn('Supabase chưa cấu hình — đơn hàng chỉ được log tạm.');
             console.log('=== NEW ORDER ===', { name, phone, address, note, items: cart, total: getCartTotal() });
@@ -355,8 +354,8 @@ async function completeCheckout(e) {
         }, 200);
     } catch (err) {
         console.error('Lỗi lưu đơn hàng:', err.message || err);
-        showToast(err.message?.includes('create_order')
-            ? 'Chưa cấu hình database. Chạy supabase-fix-orders.sql trên Supabase.'
+        showToast(err.message?.includes('create_order') || err.message?.includes('profiles')
+            ? 'Chưa cấu hình database. Chạy supabase-auth.sql trên Supabase.'
             : 'Không thể đặt hàng. Vui lòng thử lại sau.');
     } finally {
         if (submitBtn) {
