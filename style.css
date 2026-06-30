@@ -236,12 +236,11 @@ img {
 .user-menu-btn {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    max-width: 220px;
-    padding: 4px 12px 4px 4px;
-    border: 1px solid var(--gray-200);
-    border-radius: 999px;
-    background: white;
+    justify-content: center;
+    padding: 2px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    background: none;
     cursor: pointer;
     font-family: inherit;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -250,76 +249,55 @@ img {
 .user-menu-btn:hover,
 .user-menu-btn[aria-expanded="true"] {
     border-color: var(--primary-light);
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.18);
 }
 
 .user-avatar-wrap {
     position: relative;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .user-avatar {
-    width: 36px;
-    height: 36px;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
     display: block;
 }
 
+.user-avatar[hidden] {
+    display: none;
+}
+
 .user-avatar-fallback {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--primary), #7c3aed);
     color: white;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 700;
 }
 
-.user-menu-label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    min-width: 0;
-    text-align: left;
-}
-
-.user-menu-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--gray-800);
-    line-height: 1.2;
-}
-
-.user-menu-email {
-    font-size: 11px;
-    color: var(--gray-500);
-    max-width: 130px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.user-menu-chevron {
-    font-size: 11px;
-    color: var(--gray-400);
-    flex-shrink: 0;
-    transition: transform 0.2s;
-}
-
-.user-menu-btn[aria-expanded="true"] .user-menu-chevron {
-    transform: rotate(180deg);
+.user-avatar-fallback[hidden] {
+    display: none;
 }
 
 .user-dropdown {
     display: none;
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 12px);
     right: 0;
     min-width: 240px;
     background: white;
@@ -330,6 +308,31 @@ img {
     z-index: 1100;
 }
 
+/* Mũi tên nhỏ trỏ lên avatar */
+.user-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    right: 16px;
+    width: 12px;
+    height: 12px;
+    background: var(--gray-50);
+    border-left: 1px solid var(--gray-200);
+    border-top: 1px solid var(--gray-200);
+    transform: rotate(45deg);
+}
+
+/* Vùng đệm vô hình để di chuột từ avatar xuống dropdown không bị mất */
+.user-menu::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    height: 14px;
+}
+
+.user-menu:hover .user-dropdown,
 .user-dropdown.open {
     display: block;
     animation: dropdownFadeIn 0.18s ease;
@@ -2530,21 +2533,6 @@ img {
 
     .product-page-actions {
         flex-direction: column;
-    }
-
-    .user-menu-email {
-        display: none;
-    }
-
-    .user-menu-label {
-        max-width: 72px;
-    }
-
-    .user-menu-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        max-width: 72px;
     }
 
     .product-detail {

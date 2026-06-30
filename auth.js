@@ -155,13 +155,10 @@ function updateAuthUI() {
         if (mobileUserCard) mobileUserCard.hidden = false;
         if (mobileSignOut) mobileSignOut.hidden = false;
 
-        const displayName = getDisplayName();
         const fullName = getFullName();
         const email = currentUser.email || '';
         const avatarUrl = getAvatarUrl();
 
-        const userName = document.getElementById('userName');
-        const userEmail = document.getElementById('userEmail');
         const dropdownName = document.getElementById('dropdownName');
         const dropdownEmail = document.getElementById('dropdownEmail');
         const userAvatar = document.getElementById('userAvatar');
@@ -170,8 +167,6 @@ function updateAuthUI() {
         const mobileUserEmail = document.getElementById('mobileUserEmail');
         const mobileUserAvatar = document.getElementById('mobileUserAvatar');
 
-        if (userName) userName.textContent = displayName;
-        if (userEmail) userEmail.textContent = email;
         if (dropdownName) dropdownName.textContent = fullName;
         if (dropdownEmail) dropdownEmail.textContent = email;
         if (mobileUserName) mobileUserName.textContent = fullName;
