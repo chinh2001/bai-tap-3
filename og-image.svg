@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="NhaVuiShop">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4f46e5"/>
+      <stop offset="55%" stop-color="#6d28d9"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1050" cy="80" r="180" fill="#fff" opacity="0.04"/>
+  <circle cx="120" cy="560" r="220" fill="#fff" opacity="0.05"/>
+  <circle cx="900" cy="520" r="120" fill="#fbbf24" opacity="0.08"/>
+
+  <!-- Card -->
+  <g filter="url(#shadow)">
+    <rect x="80" y="100" width="1040" height="430" rx="28" fill="#ffffff" opacity="0.97"/>
+  </g>
+
+  <!-- Logo mark -->
+  <rect x="130" y="150" width="100" height="100" rx="22" fill="url(#bg)"/>
+  <path d="M158 225V175h18.5l46.5 56V175H245v50h-18.5L180 169v56h-22z" fill="#ffffff"/>
+  <circle cx="218" cy="188" r="12" fill="url(#accent)"/>
+
+  <!-- Brand text -->
+  <text x="260" y="195" font-family="Segoe UI, Arial, sans-serif" font-size="52" font-weight="700" fill="#111827">NhaVuiShop</text>
+  <text x="260" y="240" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="500" fill="#6b7280">Mua s¯m thông minh · Ti¿t kiÇm m×i ngày</text>
+
+  <!-- Features -->
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600" fill="#374151">
+    <rect x="130" y="290" width="300" height="56" rx="14" fill="#eef2ff"/>
+    <text x="155" y="327" fill="#4f46e5"> 100% chính hãng</text>
+
+    <rect x="450" y="290" width="300" height="56" rx="14" fill="#ecfdf5"/>
+    <text x="475" y="327" fill="#059669"> Giao hàng 25 ngày</text>
+
+    <rect x="770" y="290" width="300" height="56" rx="14" fill="#fff7ed"/>
+    <text x="795" y="327" fill="#d97706"> Õi tr£ 7 ngày</text>
+  </g>
+
+  <!-- URL -->
+  <text x="130" y="420" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="600" fill="#4f46e5">www.nhavuishop.io.vn</text>
+  <text x="130" y="465" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#9ca3af">Hotline: 0984 893 326</text>
+
+  <!-- Decorative products icons -->
+  <g opacity="0.9">
+    <rect x="820" y="360" width="90" height="90" rx="16" fill="#f3f4f6"/>
+    <text x="855" y="420" font-size="40" text-anchor="middle">=ñ</text>
+    <rect x="930" y="360" width="90" height="90" rx="16" fill="#f3f4f6"/>
+    <text x="975" y="420" font-size="40" text-anchor="middle"><à</text>
+    <rect x="1040" y="360" width="90" height="90" rx="16" fill="#f3f4f6"/>
+    <text x="1085" y="420" font-size="40" text-anchor="middle"><§</text>
+  </g>
+</svg>

@@ -1,4 +1,27 @@
 // ========== Product detail page ==========
+function setMetaContent(selector, content) {
+    const el = document.querySelector(selector);
+    if (el) el.setAttribute('content', content);
+}
+
+function updateProductSocialMeta(product) {
+    const siteUrl = typeof SITE_URL !== 'undefined' ? SITE_URL : 'https://www.nhavuishop.io.vn';
+    const pageUrl = `${siteUrl}/product.html?id=${product.id}`;
+    const title = `${product.name} | NhaVuiShop`;
+    const description = `${product.desc} — Giá ${formatPrice(product.price)}. Giao hàng toàn quốc tại NhaVuiShop.`;
+    const image = product.image || `${siteUrl}/og-image.png`;
+
+    document.title = title;
+    setMetaContent('meta[name="description"]', description);
+    setMetaContent('meta[property="og:title"]', title);
+    setMetaContent('meta[property="og:description"]', description);
+    setMetaContent('meta[property="og:url"]', pageUrl);
+    setMetaContent('meta[property="og:image"]', image);
+    setMetaContent('meta[name="twitter:title"]', title);
+    setMetaContent('meta[name="twitter:description"]', description);
+    setMetaContent('meta[name="twitter:image"]', image);
+}
+
 function initProductPage() {
     const container = document.getElementById('productPageContent');
     if (!container) return;
@@ -10,7 +33,7 @@ function initProductPage() {
     }
 
     const product = enrichProduct(raw);
-    document.title = `${product.name} | NhaVuiShop`;
+    updateProductSocialMeta(product);
     renderProductPage(container, product);
     renderRelatedProducts(product);
     initProductPageTimer();
